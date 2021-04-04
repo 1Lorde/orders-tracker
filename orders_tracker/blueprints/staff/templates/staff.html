@@ -1,0 +1,62 @@
+{% extends "message.html" %}
+
+{% set pagination_source='staff_bp.staff' %}
+
+
+{% block panel %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% else %}
+        <div class="level"></div>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="breadcrumb pl-3">
+        <ul>
+            <li class="is-active">
+                <a>
+                    <ion-icon name="happy-outline"></ion-icon>
+                    <span class="pl-2">Працівники</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <span class="pl-2">Всі</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block message_header %}
+    <ion-icon size="large" name="happy-outline"></ion-icon>
+    <span class="pl-2">Список працівників</span>
+{% endblock %}
+
+{% block message_body %}
+    <div class="table_div">
+        {{ table|safe }}
+    </div>
+
+    <div class="block has-text-centered">
+        <hr>
+        <a class="button is-rounded is-success is-outlined"
+           href="{{ url_for('staff_bp.new_staff') }}">
+            <span>Додати працівника</span>
+            <span class="icon"><ion-icon size="large" name="add"></ion-icon></span>
+        </a>
+    </div>
+
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock %}
+
+
+

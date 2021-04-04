@@ -1,0 +1,175 @@
+{% extends "message.html" %}
+
+{% block panel %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% else %}
+        <div class="level">
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block message_color %}
+    is-dark
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="breadcrumb pl-3">
+        <ul>
+            <li class="is-active">
+                <a>
+                    <ion-icon name="bag-outline"></ion-icon>
+                    <span class="pl-2">Замовлення</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="bag-add-outline"></ion-icon>
+                    <span class="pl-2">Додати нове</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block message_header %}
+    <ion-icon size="large" name="bag-add-outline"></ion-icon>
+    <span class="pl-2">Нове замовлення</span>
+{% endblock %}
+
+{% block message_body %}
+    <form action="" method="post" id="new_order_form">
+        {{ form.hidden_tag() }}
+        <div class="field is-horizontal">
+            <div class="column">
+                <div class="field">
+                    <label class="label">{{ form.title.label }}</label>
+                    <p class="control is-expanded">
+                        {{ form.title(class='input') }}
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label">{{ form.price.label }}</label>
+                    <div class="field-body">
+                        <div class="field is-expanded">
+                            <div class="field has-addons">
+                                <p class="control is-expanded has-icons-left">
+                                    {{ form.price(class='input') }}
+                                    <span class="icon is-left">
+                                                    <ion-icon name="cash-outline"></ion-icon>
+                                                </span>
+                                </p>
+                                <p class="control">
+                                    <a class="button is-link is-static">
+                                        UAH
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">{{ form.staff.label }}</label>
+                    <div class="control is-expanded has-icons-left">
+                        <div class="select is-fullwidth">
+                                        <span class="icon is-left">
+                                            <ion-icon name="person-outline"></ion-icon>
+                                        </span>
+                            {{ form.staff(class="is-fullwidth") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="field">
+                    <label class="label">{{ form.client.label }}</label>
+                    <div class="control is-expanded has-icons-left">
+                        {{ form.client(class='input') }}
+                        <span class="icon is-left">
+                            <ion-icon name="business"></ion-icon>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">{{ form.serial.label }}</label>
+                    <p class="control is-expanded">
+                        {{ form.serial(class='input') }}
+                    </p>
+                </div>
+                {{ datepicker.loader(theme="base") }} {# to load jQuery-ui #}
+                {{ datepicker.picker(id=".dp") }}
+                <div class="field">
+                    <label class="label">{{ form.date.label }}</label>
+                    <div class="control is-expanded has-icons-left">
+                        {{ form.date(class='input dp') }}
+                        <span class="icon is-left">
+                            <ion-icon name="calendar-outline"></ion-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column is-fullheight">
+                <label class="label">{{ form.description.label }}</label>
+                <div class="control is-expanded">
+                    {{ form.description(class='textarea', rows="7") }}
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="columns is-centered">
+            <div class="column is-3">
+                <div class="control has-icon-right">
+                    {{ form.submit(class='button is-link is-light is-rounded is-fullwidth') }}
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        $(function () {
+            $.ajax({
+                url: '{{ url_for("api_bp.client_autocomplete") }}'
+            }).done(function (data) {
+                $('#client_autocomplete').autocomplete({
+                    classes: {"ui-autocomplete": "highlight"},
+                    source: data
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#client_autocomplete').change(function () {
+                $.ajax({
+                    url: '/api/autocomplete/devices?client_name=' + $('#client_autocomplete').val()
+                }).done(function (data) {
+                    $('#serial_autocomplete').autocomplete({
+                        classes: {"ui-autocomplete": "highlight"},
+                        source: data
+                    });
+                });
+            });
+        });
+
+        {#$(function () {#}
+        {#    $.ajax({#}
+        {#        url: '{{ url_for("api_bp.staff_autocomplete") }}'#}
+        {#    }).done(function (data) {#}
+        {#        $('#staff_autocomplete').autocomplete({#}
+        {#            classes: {"ui-autocomplete": "highlight"},#}
+        {#            source: data#}
+        {#        });#}
+        {#    });#}
+
+
+        $('.dp').datepicker({
+            dateFormat: "dd.mm.yy",
+            monthNames: ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'],
+            dayNamesMin: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            firstDay: 1
+        });
+    </script>
+{% endblock %}

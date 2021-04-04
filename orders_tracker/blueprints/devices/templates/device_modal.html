@@ -1,0 +1,46 @@
+{% extends 'modal.html' %}
+
+{% set return_link=url_for('clients_bp.client', client_id=client_id) %}
+
+{% block message_header %}
+    <div class="level-item">
+        <p id="message_title">{{ message_title }}</p>
+    </div>
+    <div class="level-item is-hidden-mobile">
+        <ion-icon size="large" name="print-outline"></ion-icon>
+    </div>
+{% endblock %}
+
+{% block form %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% endif %}
+
+    <form action="" method="post" novalidate>
+        {{ modal_form.hidden_tag() }}
+        <div class="field">
+            <div class="column">
+                <div class="field">
+                    <label class="label">{{ modal_form.name.label }}</label>
+                    <p class="control">
+                        {{ modal_form.name(class='input') }}
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label">{{ modal_form.serial.label }}</label>
+                    <div class="control">
+                        {{ modal_form.serial(class='input') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div class="control has-icon-right">
+                    {{ modal_form.submit(class='button is-link is-outlined is-rounded is-fullwidth') }}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "message.html" %}
+
+{% set pagination_source='clients_bp.clients' %}
+
+{% set previous_link=url_for(
+                        pagination_source,
+                        page=pagination_data['previous'],
+                        search_query=search_field_value if search_field_value else None) %}
+
+{% set next_link=url_for(
+                        pagination_source,
+                        page=pagination_data['next'],
+                        search_query=search_field_value if search_field_value else None) %}
+
+{% set first_link=url_for(
+                        pagination_source,
+                        page=pagination_data['first'],
+                        search_query=search_field_value if search_field_value else None) %}
+
+{% set current_link=url_for(
+                        pagination_source,
+                        page=pagination_data['current'],
+                        search_query=search_field_value if search_field_value else None) %}
+
+{% set last_link=url_for(
+                        pagination_source,
+                        page=pagination_data['last'],
+                        search_query=search_field_value if search_field_value else None) %}
+
+
+{% block panel %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% else %}
+        <div class="level"></div>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="breadcrumb pl-3">
+        <ul>
+            <li class="is-active">
+                <a>
+                    <ion-icon name="people-outline"></ion-icon>
+                    <span class="pl-2">Робота з клієнтами</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <span class="pl-2">База</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block message_header %}
+    <ion-icon size="large" name="people-outline"></ion-icon>
+    <span class="pl-2">База клієнтів</span>
+{% endblock %}
+
+{% block message_body %}
+    <nav class="level">
+        <div class="level-left">
+            <div class="field">
+                <label class="label">Введіть пошуковий запит</label>
+                <div class="control">
+                    <form autocomplete="off" method="post">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input class="input" type="text" name="search_field" placeholder="Пошуковий запит"
+                                       value="{{ search_field_value if search_field_value else ''}}">
+                            </div>
+
+                            <div class="control">
+                                {% if search_field_value %}
+                                    <a href="{{ url_for('clients_bp.clients') }}" class="button">
+                                        Очистити
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="control">
+                                <input type="submit" class="button is-link" value="Пошук">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="level-right">
+            <div>
+                {% if stats.filter >= 0 and stats.filter != stats.total %}
+                    <p class="heading has-text-weight-bold is-size-7">
+                        За вашим запитом знайдено
+                        <span class="tag is-primary is-medium is-rounded ">{{ stats.filter }}</span>
+                        клієнтів
+                    </p>
+                {% else %}
+                    <p class="heading has-text-weight-bold is-size-7">Всього клієнтів: <span
+                            class="tag is-info is-medium is-rounded ">{{ stats.total }}</span>
+                    </p>
+                {% endif %}
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="table_div">
+        {{ table|safe }}
+    </div>
+
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock %}
+
+

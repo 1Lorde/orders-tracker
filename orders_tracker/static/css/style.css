@@ -1,0 +1,47 @@
+html {
+    background-color: #F5F5F5;
+}
+
+#card_shadow {
+    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
+}
+
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
+
+ion-icon {
+    font-size: 20px;
+}
+
+.table_div {
+    max-height: 48vh;
+    overflow: auto;
+    border: 2px dashed darkgrey;
+}
+
+td {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+tr {
+    cursor: pointer;
+}
+
+thead th {
+    background: #F0F0F0;
+    position: sticky;
+    top: 0;
+}
+
+.overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}

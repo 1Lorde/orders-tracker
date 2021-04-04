@@ -1,0 +1,35 @@
+{% extends 'modal.html' %}
+
+{% set return_link=url_for('clients_bp.client', client_id=client_id) %}
+{% set color='is-dark' %}
+
+{% block message_header %}
+    <div class="level-item">
+        <p id="message_title">{{ message_title }}</p>
+    </div>
+    <div class="level-item is-hidden-mobile">
+        <ion-icon size="large" name="trash-outline"></ion-icon>
+    </div>
+{% endblock %}
+
+{% block form %}
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="block ">
+            <p class="subtitle is-5">{{ message }}</p>
+        </div>
+        <div class="block">
+            <div class="field is-grouped">
+                <div class="control">
+                    {{ form.delete(class='button is-danger is-outlined is-rounded') }}
+                </div>
+                <div class="control">
+                    <a class="button is-link is-outlined is-rounded" href="{{ return_link }}">
+                        Скасувати
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

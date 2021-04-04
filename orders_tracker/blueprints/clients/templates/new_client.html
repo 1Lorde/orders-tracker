@@ -1,0 +1,111 @@
+{% extends "message.html" %}
+
+{% block panel %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% else %}
+        <div class="level"></div>
+    {% endif %}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    <nav class="breadcrumb pl-3">
+        <ul>
+            <li class="is-active">
+                <a>
+                    <ion-icon name="people-outline"></ion-icon>
+                    <span class="pl-2">Робота з клієнтами</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="person-add-outline"></ion-icon>
+                    <span class="pl-2">Додати нового</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block message_header %}
+        <ion-icon size="large" name="person-add-outline"></ion-icon>
+        <span class="pl-2">Створення клієнта</span>
+{% endblock %}
+
+{% block message_body %}
+    <form action="" method="post" autocomplete="none">
+        {{ form.hidden_tag() }}
+        <div class="field is-horizontal">
+            <div class="column">
+                <div class="field">
+                    <label class="label">{{ form.name.label }}</label>
+                    <p class="control is-expanded has-icons-left">
+                                    <span class="icon is-left">
+                                        <ion-icon name="person-outline"></ion-icon>
+                                    </span>
+                        {{ form.name(class='input') }}
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label">{{ form.phone.label }}</label>
+                    <div class="control is-expanded has-icons-left">
+                        {{ form.phone(class='input') }}
+                        <span class="icon is-left">
+                                        <ion-icon name="call-outline"></ion-icon>
+                                    </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">{{ form.address.label }}</label>
+                    <p class="control is-expanded has-icons-left">
+                        {{ form.address(class='input') }}
+                        <span class="icon is-left">
+                                        <ion-icon name="location-outline"></ion-icon>
+                                    </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="column is-fullheight">
+                <label class="label">{{ form.notes.label }}</label>
+                <div class="control is-expanded has-icons-left">
+                                <span class="icon is-left">
+                                    <ion-icon name="document-text-outline"></ion-icon>
+                                </span>
+                    {{ form.notes(class='textarea input', rows="7") }}
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="columns is-centered">
+            <div class="column is-3">
+                <div class="control has-icon-right">
+                    {{ form.submit(class='button is-link is-light is-rounded is-fullwidth') }}
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        $(function () {
+            $.ajax({
+                url: '{{ url_for("api_bp.client_autocomplete") }}'
+            }).done(function (data) {
+                $('#client_autocomplete').autocomplete({
+                    classes: {"ui-autocomplete": "highlight"},
+                    source: data
+                });
+            });
+        });
+
+        $('.dp').datepicker({
+            dateFormat: "dd.mm.yy",
+            monthNames: ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'],
+            dayNamesMin: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            firstDay: 1
+        });
+    </script>
+{% endblock %}

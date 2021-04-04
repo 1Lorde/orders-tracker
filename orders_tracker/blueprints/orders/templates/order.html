@@ -1,0 +1,131 @@
+{% extends "message.html" %}
+
+{% block panel %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% else %}
+        <div class="section"></div>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="breadcrumb pl-3">
+        <ul>
+            <li class="is-active">
+                <a>
+                    <ion-icon name="bag-outline"></ion-icon>
+                    <span class="pl-2">Замовлення</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for("orders_bp.orders") }}">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <span class="pl-2">Всі</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="information-outline"></ion-icon>
+                    <span class="pl-2">Інформація про №{{ order.id }}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block message_header %}
+    <ion-icon size="large" name="information-circle-outline"></ion-icon>
+    <span class="pl-2">Деталі замовлення</span>
+{% endblock %}
+
+{% block message_body %}
+    <div class="box">
+        <div class="level">
+            <div class="level-left">
+                <ion-icon size="large" name="attach-outline"></ion-icon>
+                <span class="title has-text-weight-light is-4">Замовлення
+                    <span class="has-text-weight-bold is-italic">№ {{ order.id }}</span>
+                </span>
+            </div>
+
+            <div class="level-right has-text-right is-unselectable">
+                {% if order.status_id == 1 %}
+                    <span class="tag is-medium is-link">
+                        {{ order.status }}
+                        <ion-icon class="pl-2" name="bulb"></ion-icon>
+                    </span>
+                {% elif order.status_id == 2 %}
+                    <span class="tag is-medium is-warning">
+                        {{ order.status }}
+                        <ion-icon class="pl-2" name="cog"></ion-icon>
+                    </span>
+                {% elif order.status_id == 3 %}
+                    <span class="tag is-medium is-success">
+                        {{ order.status }}
+                        <ion-icon class="pl-2" name="checkmark-circle"></ion-icon>
+                    </span>
+                {% elif order.status_id == 4 %}
+                    <span class="tag is-medium is-danger">
+                        {{ order.status }}
+                        <ion-icon class="pl-2" name="close-circle"></ion-icon>
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        <hr/>
+
+        <div class="columns mt-5">
+            <div class="column">
+                <div class="container is-fluid ml-5">
+                    <h5 class="title is-5">{{ order.title }}</h5>
+                    <div class="block">Пристрій:
+                        <strong>{{ order.device.name if order.device.name else "(Без назви)" }}</strong>
+                        <span class="tag is-primary is-light is-rounded">
+                                    <strong>{{ order.device.serial }}</strong>
+                        </span>
+                    </div>
+                    <div class="block">Клієнт:
+                        <a href="{{ url_for("clients_bp.client", client_id=order.client.id) }}">
+                            <strong>{{ order.client }}</strong>
+                        </a>
+                    </div>
+                    <div class="block">Вартість:
+                        <strong>{{ order.price if order.price else "(Не вказано)" }} грн</strong>
+                    </div>
+                    <div class="block">Виконавець:
+                        <strong>{{ order.staff.name if order.staff.name else "(Не вказано)" }}</strong>
+                    </div>
+                </div>
+
+            </div>
+            <div class="column">
+                {% if order.description %}
+                    <h5 class="subtitle is-5">Опис:</h5>
+                    <li><strong>{{ order.description }}</strong></li>
+                {% endif %}
+            </div>
+        </div>
+        <div class="level-right">
+            <span class="heading is-size-7">Додано: {{ order.created_at.strftime('%d.%m.%Y') }}</span>
+        </div>
+        <div class="block has-text-centered">
+            <hr>
+            <form action="" method="post">
+                {% if order.status_id == 1 %}
+                    <input class="button is-rounded is-light is-link" type="submit" name="start"
+                           value="Розпочати"/>
+                {% elif order.status_id == 2 %}
+                    <input class="button is-rounded is-light is-success" type="submit" name="finish"
+                           value="Завершити"/>
+                {% endif %}
+
+                {% if order.status_id < 3 %}
+                    <input class="button is-rounded is-light is-danger" type="submit" name="cancel"
+                           value="Скасувати"/>
+                {% endif %}
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
+

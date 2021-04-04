@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Трекер_Замовлень</title>
+
+    <link rel="stylesheet" href="/static/css/bulma.min.css"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}">
+
+    <script src="/static/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule src="/static/ionicons/ionicons.esm.js"></script>
+
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.css">
+    <script type="text/javascript" src="/static/jquery/jquery-latest.js"></script>
+    <script src="/static/jquery/jquery-ui.js"></script>
+
+</head>
+
+<body>
+<section class="container is-fluid" id="hero">
+    <nav class="section">
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <a href="{{ url_for('orders_bp.orders') }}">
+                        <img src="/static/img/icon.png" width="64" height="64" alt="icon">
+                    </a>
+                </div>
+                <div class="level-item has-text-centered">
+                        <span class="title is-4">
+                            <span class="title is-4 has-text-link">Трекер</span>_Замовлень
+                        </span>
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <a href="{{ url_for('orders_bp.new_order') }}" class="navbar-item title is-6">
+                        <div class="level">
+                            <ion-icon size="large" name="bag-add-outline"></ion-icon>
+                            <span class="is-hidden-mobile" style="margin-left: 10px">Нове замовлення</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="level-item">
+                    <a href="{{ url_for('clients_bp.new_client') }}" class="navbar-item title is-6">
+                        <div class="level">
+                            <ion-icon size="large" name="person-add-outline"></ion-icon>
+                            <span class="is-hidden-mobile" style="margin-left: 10px">Новий клієнт</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% block panel %}
+    {% endblock %}
+
+    <div id="workspace">
+        {% block breadcrumbs %}
+        {% endblock %}
+        <div class="columns">
+            <div class="column">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+            {% block side_menu %}
+                <div class="column is-one-fifth">
+                    <div class="box">
+                        <aside class="menu">
+                            <div class="block">
+                                <div class="level-left">
+                                    <ion-icon class="has-text-link" size="large" name="bag-outline"></ion-icon>
+                                    <span class="subtitle pl-2">Замовлення</span>
+                                </div>
+                                <br/>
+                                <ul class="menu-list">
+                                    <li>
+                                        <a href="{{ url_for('orders_bp.orders', status=1) }}"
+                                           class="navbar-item title is-6">
+                                            <div class="level-left">
+                                                <ion-icon name="bulb-outline"></ion-icon>
+                                                <span class="pl-2">Нові</span>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url_for('orders_bp.orders', status=2) }}"
+                                           class="navbar-item title is-6">
+                                            <div class="level-left">
+                                                <ion-icon name="cog-outline"></ion-icon>
+                                                <span class="pl-2">В процесі</span>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url_for('orders_bp.orders', search_query=week) }}"
+                                           class="navbar-item title is-6">
+                                            <div class="level-left">
+                                                <ion-icon name="calendar-outline"></ion-icon>
+                                                <span class="pl-2">За останні 7 днів</span>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url_for('orders_bp.orders', search_query=month) }}"
+                                           class="navbar-item title is-6">
+                                            <div class="level-left">
+                                                <ion-icon name="calendar-outline"></ion-icon>
+                                                <span class="pl-2">За останні 30 днів</span>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url_for('orders_bp.orders') }}" class="navbar-item title is-6">
+                                            <div class="level-left">
+                                                <ion-icon name="list-outline"></ion-icon>
+                                                <span class="pl-2">Всі замовлення</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="block">
+                                <div class="level-left">
+                                    <ion-icon class="has-text-info" size="large" name="people-outline"></ion-icon>
+                                    <span class="subtitle pl-2">Робота з клієнтами</span>
+                                </div>
+                                <br/>
+                                <ul class="menu-list">
+                                    <li>
+                                        <a href="{{ url_for('clients_bp.clients') }}"
+                                           class="title is-6"
+                                           onMouseOver="this.style.color='#3298dc'"
+                                           onMouseOut="this.style.color='#4a4a4a'">
+                                            <div class="level-left">
+                                                <ion-icon name="list-outline"></ion-icon>
+                                                <span class="pl-2">Всі клієнти</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="block">
+                                <div class="level-left">
+                                    <ion-icon class="has-text-primary-dark" size="large"
+                                              name="happy-outline"></ion-icon>
+                                    <span class="subtitle pl-2">Працівники</span>
+                                </div>
+                                <br/>
+                                <ul class="menu-list">
+                                    <li>
+                                        <a href="{{ url_for('staff_bp.staff') }}"
+                                           class="title is-6"
+                                           onMouseOver="this.style.color='#339A84'"
+                                           onMouseOut="this.style.color='#4a4a4a'">
+                                            <div class="level-left">
+                                                <ion-icon name="list-outline"></ion-icon>
+                                                <span class="pl-2">Список працівників</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <hr/>
+
+                            <div class="block">
+                                <ul class="menu-list">
+                                    <li>
+                                        <a href="{{ url_for('start_bp.start') }}"
+                                           class="title is-6">
+                                            <div class="level-left">
+                                                <ion-icon name="help-circle-outline"></ion-icon>
+                                                <span class="pl-2">Допомога</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+
+    <br/>
+    <div class="level">
+        <div class="level-left"></div>
+        <p class="level-right">
+            <a href="https://g.page/FOP_Savchuk?share">
+                <span class="tag heading is-size-7">© ФОП Савчук</span>
+            </a>
+        </p>
+    </div>
+</section>
+</body>
+</html>

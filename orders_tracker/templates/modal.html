@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Трекер_Замовлень</title>
+    <link rel="stylesheet" href="/static/css/bulma.min.css"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}">
+    <script src="/static/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule src="/static/ionicons/ionicons.js"></script>
+
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.css">
+    <script type="text/javascript" src="/static/jquery/jquery-latest.js"></script>
+    <script src="/static/jquery/jquery-ui.js"></script>
+</head>
+
+<body>
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="block">
+            <a class="button is-dark is-rounded" href="{{ return_link }}">
+                <ion-icon name="return-down-back-outline"></ion-icon>
+                <span style="padding-left: 10px;">Повернутися</span>
+            </a>
+        </div>
+
+        <div class="message is-medium">
+            <div class="message-header">
+                {% block message_header %}
+                {% endblock %}
+            </div>
+            <div class="message-body">
+                {% block form %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

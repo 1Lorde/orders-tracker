@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Трекер_Замовлень</title>
+    <link rel="stylesheet" href="/static/css/bulma.min.css"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.png') }}">
+    <script src="/static/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule src="/static/ionicons/ionicons.js"></script>
+
+    <link rel="stylesheet" href="/static/jquery/jquery-ui.css">
+    <script type="text/javascript" src="/static/jquery/jquery-latest.js"></script>
+    <script src="/static/jquery/jquery-ui.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            background: #FAFAFA;
+            padding: 1em;
+            overflow: hidden;
+        }
+
+        .background-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            user-select: none;
+        }
+
+        .background-wrapper h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 60vmax;
+            letter-spacing: 0.025em;
+            margin: 0;
+            transition: 750ms ease-in-out;
+        }
+
+        p {
+            font-size: calc(1em + 3vmin);
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            margin: 0;
+            text-align: right;
+            user-select: none;
+        }
+
+        @media screen and (min-width: 340px) {
+            p {
+                width: 70%;
+            }
+        }
+
+        @media screen and (min-width: 560px) {
+            p {
+                width: 50%;
+            }
+        }
+
+        @media screen and (min-width: 940px) {
+            p {
+                width: 35%;
+            }
+        }
+
+        @media screen and (min-width: 1300px) {
+            p {
+                width: 30%;
+            }
+        }
+
+
+    </style>
+
+</head>
+<body>
+<a class="button is-light is-rounded" style="z-index: 1;" href="javascript:history.back()">
+    <ion-icon name="return-down-back-outline"></ion-icon>
+    <span style="padding-left: 10px;">Повернутися</span>
+</a>
+<div class="background-wrapper">
+    <h1 id="visual">404</h1>
+</div>
+<p class="title is-1">Сторінку не знайдено</p>
+
+<script>
+    const visual = document.getElementById("visual")
+    const events = ['resize', 'load']
+
+    events.forEach(function (e) {
+        window.addEventListener(e, function () {
+            const width = window.innerWidth
+            const height = window.innerHeight
+            const ratio = 45 / (width / height)
+            visual.style.transform = "translate(-50%, -50%) rotate(-" + ratio + "deg)"
+        });
+    });
+</script>
+</body>
+</html>

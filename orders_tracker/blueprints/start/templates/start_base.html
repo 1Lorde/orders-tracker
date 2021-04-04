@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Трекер_Замовлень</title>
+
+    <link rel="stylesheet" href="/static/css/bulma.min.css"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <link rel="stylesheet" href="/static/css/jquery-steps.css"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}">
+
+    <script src="/static/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule src="/static/ionicons/ionicons.esm.js"></script>
+
+    <script src="/static/jquery/jquery-latest.js"></script>
+    <script src="/static/jquery/jquery-steps.min.js"></script>
+
+
+</head>
+
+<body>
+<section class="hero is-link is-fullheight">
+    <div class="hero-body">
+        <div class="container is-fullheight">
+            <div class="level-left">
+                <div class="level-item">
+                    <a href="{{ url_for('start_bp.start') }}">
+                        <img src="/static/img/icon.png" width="64" height="64" alt="icon">
+                    </a>
+                </div>
+                <div class="level-item has-text-centered">
+                    <span class="title is-2">
+                        <span class="title is-2 has-text-black">Трекер</span>_Замовлень
+                    </span>
+                    <span class="heading is-size-7 pl-2">Допомога</span>
+                </div>
+            </div>
+
+            <div class="section is-small">
+                <div class="notification">
+                    <div class="step-app" id="steps">
+                        <ul class="step-steps">
+                            <li data-step-target="step1">
+                                <span class="icon-text">
+                                  <span class="icon">
+                                    <ion-icon name="paper-plane-outline"></ion-icon>
+                                  </span>
+                                  <span class="pl-2">Вітання</span>
+                                </span>
+                            </li>
+                            <li data-step-target="step2">
+                                <span class="icon-text">
+                                  <span class="icon">
+                                    <ion-icon name="happy-outline"></ion-icon>
+                                  </span>
+                                  <span class="pl-2">Працівники</span>
+                                </span>
+                            </li>
+                            <li data-step-target="step3">
+                                <span class="icon-text">
+                                  <span class="icon">
+                                    <ion-icon name="people-outline"></ion-icon>
+                                  </span>
+                                  <span class="pl-2">Клієнти</span>
+                                </span>
+                            </li>
+                            <li data-step-target="step4">
+                                <span class="icon-text">
+                                  <span class="icon">
+                                    <ion-icon name="bag-outline"></ion-icon>
+                                  </span>
+                                  <span class="pl-2">Замовлення</span>
+                                </span>
+                            </li>
+                            <li data-step-target="step5">
+                                <span class="icon-text">
+                                  <span class="icon">
+                                      <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                                  </span>
+                                  <span class="pl-2">Ще дещо</span>
+                                </span>
+                            </li>
+                            <li data-step-target="step6">
+                                <span class="icon-text">
+                                  <span class="icon">
+                                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                                  </span>
+                                  <span class="pl-2">Готово</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div class="step-content">
+                            {% include 'notification.html' %}
+
+                            <div class="step-tab-panel" data-step="step1">
+                                {% include 'start_greeting.html' %}
+                            </div>
+
+                            <div class="step-tab-panel" data-step="step2">
+                                {% include 'start_staff.html' %}
+                            </div>
+
+                            <div class="step-tab-panel" data-step="step3">
+                                {% include 'start_clients.html' %}
+                            </div>
+
+                            <div class="step-tab-panel" data-step="step4">
+                                {% include 'start_orders.html' %}
+                            </div>
+
+                            <div class="step-tab-panel" data-step="step5">
+                                {% include 'start_more.html' %}
+                            </div>
+
+                            <div class="step-tab-panel" data-step="step6">
+                                {% include 'start_done.html' %}
+                            </div>
+                        </div>
+
+                        <div class="step-footer has-text-right has-text-dark">
+                            <button data-step-action="prev" class="button is-inverted is-link" onclick="jumpToTop()">
+                                Повернутись
+                            </button>
+                            <button data-step-action="next" class="button is-inverted is-link" onclick="jumpToTop()">
+                                Далі
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level">
+                <div class="level-left"></div>
+                <p class="level-right">
+                    <a href="https://g.page/FOP_Savchuk?share">
+                        <span class="heading is-size-6">© ФОП Савчук</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function jumpToTop() {
+        $('html, body').animate({scrollTop: 0}, 'slow');
+    }
+
+    function getStepNum() {
+        const host = location.protocol + '//' + location.host;
+
+        if (document.referrer === host + '/staff/new?start=1') {
+            return 1;
+        } else
+            return 0;
+    }
+
+    $('#steps').steps({
+        startAt: getStepNum(),
+    });
+
+</script>
+
+</body>
+</html>

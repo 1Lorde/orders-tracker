@@ -1,0 +1,94 @@
+{% extends 'modal.html' %}
+
+{% set return_link=url_for('clients_bp.client', client_id=client_id) %}
+
+
+{% block message_header %}
+    <div class="level-item">
+        <p id="message_title">{{ message_title }}</p>
+    </div>
+    <div class="level-item is-hidden-mobile">
+        <ion-icon size="large" name="create-outline"></ion-icon>
+    </div>
+{% endblock %}
+
+{% block form %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% endif %}
+
+    <form action="" method="post" autocomplete="none">
+        {{ form.hidden_tag() }}
+        <div class="field is-horizontal">
+            <div class="column">
+                <div class="field">
+                    <label class="label">{{ form.name.label }}</label>
+                    <p class="control is-expanded has-icons-left">
+                                    <span class="icon is-left">
+                                        <ion-icon name="person-outline"></ion-icon>
+                                    </span>
+                        {{ form.name(class='input') }}
+                    </p>
+                </div>
+                <div class="field">
+                    <label class="label">{{ form.phone.label }}</label>
+                    <div class="control is-expanded has-icons-left">
+                        {{ form.phone(class='input') }}
+                        <span class="icon is-left">
+                            <ion-icon name="call-outline"></ion-icon>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">{{ form.address.label }}</label>
+                    <p class="control is-expanded has-icons-left">
+                        {{ form.address(class='input') }}
+                        <span class="icon is-left">
+                            <ion-icon name="location-outline"></ion-icon>
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="column is-fullheight">
+                <label class="label">{{ form.notes.label }}</label>
+                <div class="control is-expanded has-icons-left">
+                    <span class="icon is-left">
+                        <ion-icon name="document-text-outline"></ion-icon>
+                    </span>
+                    {{ form.notes(class='textarea input', rows="9") }}
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="columns is-centered">
+            <div class="column is-3">
+                <div class="control has-icon-right">
+                    {{ form.submit(class='button is-link is-outlined is-rounded is-fullwidth') }}
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+        $(function () {
+            $.ajax({
+                url: '{{ url_for("api_bp.client_autocomplete") }}'
+            }).done(function (data) {
+                $('#client_autocomplete').autocomplete({
+                    classes: {"ui-autocomplete": "highlight"},
+                    source: data
+                });
+            });
+        });
+
+        $('.dp').datepicker({
+            dateFormat: "dd.mm.yy",
+            monthNames: ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'],
+            dayNamesMin: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            firstDay: 1
+        });
+    </script>
+{% endblock %}
+

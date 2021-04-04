@@ -1,0 +1,133 @@
+{% extends "message.html" %}
+
+{% block panel %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% else %}
+        <div class='level'></div>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav class="breadcrumb pl-4">
+        <ul>
+            <li class="is-active">
+                <a>
+                    <ion-icon name="people-outline"></ion-icon>
+                    <span class="pl-2">Робота з клієнтами</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('clients_bp.clients') }}">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <span class="pl-2">База клієнтів</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="person-outline"></ion-icon>
+                    <span class="pl-2">{{ client.name }}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block message_header %}
+    <ion-icon size="large" name="information-circle-outline"></ion-icon>
+    <span class="pl-2">Інформація про клієнта</span>
+{% endblock %}
+
+{% block message_body %}
+    <div class="tile is-ancestor">
+        <div class="tile is-7 is-vertical is-parent">
+            <div class="tile is-child box">
+                <article class="media">
+                    <figure class="media-left">
+                        <p class="image is-64x64">
+                            <ion-icon style="font-size:48px;" name="person-outline"></ion-icon>
+                        </p>
+                    </figure>
+                    <div class="media-content">
+                        <div class="content">
+                            <h3 class="title is-3">{{ client.name }}</h3>
+                            <ul>
+                                <li>Номер телефону:
+                                    <strong>{{ client.phone if client.phone else "(Не вказано)" }}</strong></li>
+                                <li>Адреса:
+                                    <a href="{{ address_link if address_link else "" }}">
+                                        <strong>{{ client.address if client.address else "(Не вказано)" }}</strong>
+                                    </a>
+                                </li>
+                                {% if client.notes %}
+                                    <li>Нотатки: <strong>{{ client.notes }}</strong></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+                    </div>
+                </article>
+            </div>
+            <div class="tile is-child">
+                <div class="level-right">
+                    <p class="buttons">
+                        <a class="button is-rounded is-success is-outlined"
+                           href="{{ url_for('devices_bp.new_device', client_id=client.id) }}">
+                            <span>Додати пристрій</span>
+                            <span class="icon"><ion-icon name="print"></ion-icon></span>
+                        </a>
+
+                        <a class="button is-rounded is-link is-outlined"
+                           href="{{ url_for('clients_bp.edit_client', client_id=client.id) }}">
+                            <span>Редагувати</span>
+                            <span class="icon"><ion-icon name="pencil-outline"></ion-icon></span>
+                        </a>
+
+                        <a class="button is-rounded is-danger is-outlined"
+                           href="{{ url_for('clients_bp.delete_client', client_id=client.id) }}">
+                            <span>Видалити</span>
+                            <span class="icon"><ion-icon name="trash"></ion-icon></span>
+                        </a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <div class="tile is-parent">
+            <div class="tile is-child box">
+                <div class="column">
+                    <div class="level-left">
+                        <ion-icon size="large" name="print-outline"></ion-icon>
+                        {% if devices %}
+                            <span class="title is-5 pl-2">Зареєстровані пристрої:</span>
+                        {% else %}
+                            <span class="title is-5 has-text-grey pl-2">Немає зареєстрованих пристроїв</span>
+                        {% endif %}
+                    </div>
+                    <div class="section">
+                        {% if devices %}
+                            <ol>
+                                {% for device in devices %}
+                                    <div class="block">
+                                        <li class="subtitle is-6">
+                                            <span>{{ device.name if device.name else "(Без назви)" }}</span>
+                                            <span class="tag is-primary is-light is-medium is-rounded"><strong>{{ device.serial }}</strong></span>
+                                            <a class="button is-small is-link is-inverted is-pulled-right"
+                                               href="{{ url_for('devices_bp.edit_device', client_id=client.id, serial=device.serial) }}">
+                                                <ion-icon name="create-outline"></ion-icon>
+                                            </a>
+                                        </li>
+
+                                    </div>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
