@@ -16,11 +16,23 @@
 
     <script src="/static/jquery/jquery-latest.js"></script>
     <script src="/static/jquery/jquery-steps.min.js"></script>
-
-
 </head>
 
 <body>
+<script>
+    function supportsEmoji() {
+        var ctx = document.createElement("canvas").getContext("2d");
+        ctx.fillText("😗", -2, 4);
+        return ctx.getImageData(0, 0, 1, 1).data[3] > 0; // Not a transparent pixel
+    }
+
+    console.log(supportsEmoji());
+    if (supportsEmoji() === true) {
+        {% set supportsEmoji=true %}
+    } else {
+        {% set supportsEmoji=false %}
+    }
+</script>
 <section class="hero is-link is-fullheight">
     <div class="hero-body">
         <div class="container is-fullheight">
@@ -96,27 +108,39 @@
                             {% include 'notification.html' %}
 
                             <div class="step-tab-panel" data-step="step1">
-                                {% include 'start_greeting.html' %}
+                                {% with supportsEmoji=supportsEmoji %}
+                                    {% include 'start_greeting.html' %}
+                                {% endwith %}
                             </div>
 
                             <div class="step-tab-panel" data-step="step2">
-                                {% include 'start_staff.html' %}
+                                {% with supportsEmoji=supportsEmoji %}
+                                    {% include 'start_staff.html' %}
+                                {% endwith %}
                             </div>
 
                             <div class="step-tab-panel" data-step="step3">
-                                {% include 'start_clients.html' %}
+                                {% with supportsEmoji=supportsEmoji %}
+                                    {% include 'start_clients.html' %}
+                                {% endwith %}
                             </div>
 
                             <div class="step-tab-panel" data-step="step4">
-                                {% include 'start_orders.html' %}
+                                {% with supportsEmoji=supportsEmoji %}
+                                    {% include 'start_orders.html' %}
+                                {% endwith %}
                             </div>
 
                             <div class="step-tab-panel" data-step="step5">
-                                {% include 'start_more.html' %}
+                                {% with supportsEmoji=supportsEmoji %}
+                                    {% include 'start_more.html' %}
+                                {% endwith %}
                             </div>
 
                             <div class="step-tab-panel" data-step="step6">
-                                {% include 'start_done.html' %}
+                                {% with supportsEmoji=supportsEmoji %}
+                                    {% include 'start_done.html' %}
+                                {% endwith %}
                             </div>
                         </div>
 
@@ -160,6 +184,7 @@
     $('#steps').steps({
         startAt: getStepNum(),
     });
+</script>
 
 </script>
 
