@@ -1,6 +1,9 @@
 # orders-tracker (*Трекер_Замовлень*)
 
 **orders-tracker** - application for small/medium business, that allows to manage clients, orders and staff. This app written in Python 3.8 using Flask framework.
+
+![Orders page screenshot](https://github.com/1Lorde/orders-tracker/blob/master/orders_tracker/static/img/orders.png?raw=true)
+
 ## Build
 
 ### Prerequisites
