@@ -6,12 +6,9 @@ from wtforms.validators import DataRequired, Length, Regexp
 
 
 class NewOrderForm(FlaskForm):
-    title = StringField("Назва",
-                        validators=[DataRequired(),
-                                    Length(max=100)])
-
     description = TextAreaField("Опис: ",
-                                validators=[Length(max=1000)])
+                                validators=[DataRequired(),
+                                            Length(max=1000)])
 
     client = StringField('Клієнт',
                          id='client_autocomplete',
@@ -39,7 +36,6 @@ class NewOrderForm(FlaskForm):
     def __init__(self, order=None, staff_choices=None, type_choices=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if order:
-            self.title.data = order.title
             self.description.data = order.description
             self.client.data = order.client
             self.created_at.data = order.created_at.strftime("%d.%m.%Y")
@@ -112,7 +108,6 @@ class NavigationForm(FlaskForm):
 
     sort_by_field = SelectField('Сортувати за', choices=[('new_first', 'Датою (нові спочатку)'),
                                                          ('old_first', 'Датою (старі спочатку)'),
-                                                         ('title', 'Назвою'),
                                                          ('client', 'Клієнтом'),
                                                          ('status', 'Статусом')])
 

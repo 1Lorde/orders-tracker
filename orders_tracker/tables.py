@@ -38,12 +38,10 @@ class TypeCol(Col):
     def td_format(self, content):
         if content.name == 'Заправка':
             return f'<span class="tag is-black tag_shadow is-unselectable"><strong>{content.name}<strong></span>'
-        elif content.name == 'Ремонт':
-            return f'<span class="tag is-light tag_shadow is-unselectable"><strong>{content.name}<strong></span>'
         elif content.name == 'Інше':
-            return f'<span class="tag is-white tag_shadow is-unselectable"><strong>{content.name}<strong></span>'
+            return f'<span class="tag is-light tag_shadow is-unselectable"><strong>{content.name}<strong></span>'
 
-        return f'<span class="tag is-rounded is-light"><strong>{content.name}</strong></span>'
+        return f'<span class="tag is-white tag_shadow is-unselectable"><strong>{content.name}</strong></span>'
 
 
 class OrdersTable(Table):
@@ -51,7 +49,7 @@ class OrdersTable(Table):
     created_at = DateCol("Дата", date_format="d.MM.Y")
     id = Col("№ замовлення")
     type = TypeCol("Тип")
-    title = Col("Назва")
+    description = Col("Опис")
     client = Col("Клієнт")
     device = SerialCol("Пристрій")
     staff = Col("Працівник")

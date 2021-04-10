@@ -26,8 +26,7 @@ class Client(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(1000))
+    description = db.Column(db.String(1000), nullable=False)
     price = db.Column(db.Float)
 
     status_id = db.Column(db.Integer, db.ForeignKey('order_status.id'), nullable=False)
@@ -47,9 +46,8 @@ class Order(db.Model):
 
     created_at = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, title, client_id=None, device_id=None,
+    def __init__(self, client_id=None, device_id=None,
                  staff_id=None, description=None, price=None, created_at=None, status_id=None, type_id=None):
-        self.title = title
         self.description = description
         self.price = price
         self.client_id = client_id
@@ -60,7 +58,7 @@ class Order(db.Model):
         self.type_id = type_id
 
     def __repr__(self):
-        return '<Order %r>' % self.title
+        return '<Order %r>' % self.description
 
 
 class Device(db.Model):

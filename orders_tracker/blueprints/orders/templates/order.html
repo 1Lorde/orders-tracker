@@ -77,21 +77,19 @@
         <div class="columns mt-5">
             <div class="column">
                 <div class="container is-fluid ml-5">
-                    <h5 class="title is-5">
-                        {{ order.title }}
+                    <div class="block">Тип замовлення:
                         {% if order.type.id == 1 %}
                             <span class="tag is-black ml-3 tag_shadow">
                             <strong>{{ order.type.name }}</strong>
                         {% elif order.type.id == 2 %}
                             <span class="tag is-light ml-3 tag_shadow">
                             <strong>{{ order.type.name }}</strong>
-                        {% elif order.type.id == 3 %}
+                        {% else %}
                             <span class="tag is-white ml-3 tag_shadow">
                             <strong>{{ order.type.name }}</strong>
                         {% endif %}
                         </span>
-                    </h5>
-
+                    </div>
                     <div class="block">Клієнт:
                         <a href="{{ url_for("clients_bp.client", client_id=order.client.id) }}">
                             <strong>{{ order.client }}</strong>
@@ -113,10 +111,8 @@
 
             </div>
             <div class="column">
-                {% if order.description %}
-                    <h5 class="subtitle is-5">Опис:</h5>
-                    <li><strong>{{ order.description }}</strong></li>
-                {% endif %}
+                <h5 class="subtitle is-5">Опис:</h5>
+                <li><strong>{{ order.description }}</strong></li>
             </div>
         </div>
         <div class="block has-text-right">

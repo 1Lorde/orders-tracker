@@ -28,11 +28,13 @@ def init_db(flask_app):
     db.session.add(cancelled)
 
     refill = OrderType('Заправка')
-    repair = OrderType('Ремонт')
     etc = OrderType('Інше')
+    repair = OrderType('Ремонт')
+    diagnostic = OrderType('Діагностика')
     db.session.add(refill)
-    db.session.add(repair)
     db.session.add(etc)
+    db.session.add(repair)
+    db.session.add(diagnostic)
 
     db.session.commit()
 

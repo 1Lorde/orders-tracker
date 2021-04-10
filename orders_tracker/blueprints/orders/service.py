@@ -18,8 +18,7 @@ dd_pattern = re.compile(r'^(\d{1,2}.\d{1,2}\.\d{2,4}\-\d{1,2}\.\d{1,2}\.\d{2,4})
 
 
 def search_in_columns(search, query):
-    condition = or_(Order.title.ilike(f"%{search}%"),
-                    Order.description.ilike(f"%{search}%"),
+    condition = or_(Order.description.ilike(f"%{search}%"),
                     Order.client.has(Client.name.ilike(f"%{search}%")),
                     Order.device.has(Device.serial.ilike(f"%{search}%")),
                     Order.staff.has(Staff.name.ilike(f"%{search}%")))
@@ -93,8 +92,6 @@ def sort_orders(sort_by, orders_query):
         orders_query = orders_query.order_by(Order.created_at.desc())
     elif sort_by == 'old_first':
         orders_query = orders_query.order_by(Order.created_at)
-    elif sort_by == 'title':
-        orders_query = orders_query.order_by(Order.title)
     elif sort_by == 'client':
         orders_query = orders_query.order_by(Order.client_id)
     elif sort_by == 'status':
@@ -180,10 +177,9 @@ def add_order(form):
     staff = get_staff_by_name(form.staff.data)
     order_type = get_order_type_by_name(form.type.data)
 
-    order = Order(form.title.data,
+    order = Order(description=form.description.data,
                   client_id=client.id,
                   device_id=device.id,
-                  description=form.description.data,
                   staff_id=staff.id,
                   price=form.price.data,
                   status_id=1,
@@ -216,7 +212,6 @@ def update_order(form, order_id):
     order_type = get_order_type_by_name(form.type.data)
 
     edited_order = Order.query.filter_by(id=order_id).first()
-    edited_order.title = form.title.data
     edited_order.client_id = client.id
     edited_order.device_id = device.id
     edited_order.description = form.description.data
