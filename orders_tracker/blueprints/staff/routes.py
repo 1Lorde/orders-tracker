@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from orders_tracker.blueprints.staff.service import render_empty
+from orders_tracker.blueprints.staff.service import render_empty, get_staff_stats_in_year
 from orders_tracker.forms import NewStaffForm
 from orders_tracker.models import Staff
-from orders_tracker.blueprints.staff.service import get_staff_orders_in_month, get_staff_orders_in_previous_month, \
+from orders_tracker.blueprints.staff.service import get_staff_stats_in_month, get_staff_stats_in_previous_month, \
     add_staff
 from orders_tracker.tables import StaffTable
 
@@ -18,9 +18,15 @@ def staff():
         return render_empty()
 
     for worker in staff_list:
-        setattr(worker, 'orders_prev_month', get_staff_orders_in_previous_month(worker))
-        setattr(worker, 'orders_month', get_staff_orders_in_month(worker))
-        setattr(worker, 'orders_year', get_staff_orders_in_month(worker))
+        staff_stats = get_staff_stats_in_previous_month(worker)
+        setattr(worker, 'stats_prev_month', staff_stats)
+
+        staff_stats = get_staff_stats_in_month(worker)
+        setattr(worker, 'stats_month', staff_stats)
+
+        staff_stats = get_staff_stats_in_year(worker)
+        setattr(worker, 'stats_year', staff_stats)
+
     table = StaffTable(staff_list)
 
     return render_template('staff.html', table=table)

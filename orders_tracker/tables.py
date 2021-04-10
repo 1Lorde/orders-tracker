@@ -1,4 +1,4 @@
-from flask_table import Table, Col, DateCol
+from flask_table import Table, Col, DateCol, NestedTableCol
 
 
 class ClientsTable(Table):
@@ -26,16 +26,31 @@ class StatusCol(Col):
         elif content.name == 'Скасовано':
             return '<span class="tag is-medium is-rounded is-light is-danger">' + content.name + '</span>'
 
+        return '<span class="tag is-medium is-rounded is-light">' + content.name + '</span>'
+
 
 class SerialCol(Col):
     def td_format(self, content):
         return '<span class="tag is-medium is-rounded is-light is-primary">' + content.serial + '</span>'
 
 
+class TypeCol(Col):
+    def td_format(self, content):
+        if content.name == 'Заправка':
+            return f'<span class="tag is-black tag_shadow is-unselectable"><strong>{content.name}<strong></span>'
+        elif content.name == 'Ремонт':
+            return f'<span class="tag is-light tag_shadow is-unselectable"><strong>{content.name}<strong></span>'
+        elif content.name == 'Інше':
+            return f'<span class="tag is-white tag_shadow is-unselectable"><strong>{content.name}<strong></span>'
+
+        return f'<span class="tag is-rounded is-light"><strong>{content.name}</strong></span>'
+
+
 class OrdersTable(Table):
     classes = ['table', 'is-striped', 'is-hoverable', 'is-fullwidth']
     created_at = DateCol("Дата", date_format="d.MM.Y")
     id = Col("№ замовлення")
+    type = TypeCol("Тип")
     title = Col("Назва")
     client = Col("Клієнт")
     device = SerialCol("Пристрій")
@@ -49,15 +64,26 @@ class OrdersTable(Table):
         return {'style': 'position: sticky; top: 0; '}
 
 
-class StaffTable(Table):
-    classes = ['table', 'is-striped', 'is-hoverable', 'is-fullwidth', 'is-bordered']
-    name = Col("Працівник")
-    orders_prev_month = Col("Замовлень за минулий місяць")
-    orders_month = Col("Замовлень за цей місяць")
-    orders_year = Col("Замовлень за рік")
+class StatsCol(Col):
+    def td_format(self, content):
+        return f'<div class="level">' \
+               f'<span class="level-item tag is-rounded is-medium is-light mr-5">' \
+               f'<ion-icon name="funnel"></ion-icon>' \
+               f'<strong class="pl-2">{content.refills}</strong>' \
+               f'</span>' \
+               f'<span class="level-item tag is-rounded is-medium is-light">' \
+               f'<strong class="pr-2">{content.refills}</strong>' \
+               f'<ion-icon name="bag-check"></ion-icon>' \
+               f'</span>' \
+               f'</div>'
 
-    def get_tr_attrs(self, item):
-        return {'style': 'text-align: center;'}
+
+class StaffTable(Table):
+    classes = ['table', 'is-fullwidth', 'is-bordered', 'has-text-centered']
+    name = Col("Працівник")
+    stats_prev_month = StatsCol("За минулий місяць")
+    stats_month = StatsCol("За цей місяць")
+    stats_year = StatsCol("За рік")
 
     def get_thead_attrs(self):
-        return {'style': 'position: sticky; top: 0; text-align: center;'}
+        return {'style': 'position: sticky; top: 0;'}

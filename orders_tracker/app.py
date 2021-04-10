@@ -9,7 +9,7 @@ from orders_tracker.api.api import api_blueprint
 from orders_tracker.blueprints.clients.routes import clients_blueprint
 from orders_tracker.blueprints.devices.routes import devices_blueprint
 from orders_tracker.blueprints.start.routes import start_blueprint
-from orders_tracker.models import db, OrderStatus, Staff, Client
+from orders_tracker.models import db, OrderStatus, Staff, Client, OrderType
 from orders_tracker.blueprints.orders.routes import orders_blueprint
 from orders_tracker.blueprints.staff.routes import staff_blueprint
 
@@ -26,6 +26,14 @@ def init_db(flask_app):
     db.session.add(in_process)
     db.session.add(done)
     db.session.add(cancelled)
+
+    refill = OrderType('Заправка')
+    repair = OrderType('Ремонт')
+    etc = OrderType('Інше')
+    db.session.add(refill)
+    db.session.add(repair)
+    db.session.add(etc)
+
     db.session.commit()
 
 

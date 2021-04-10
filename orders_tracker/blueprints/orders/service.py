@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from orders_tracker.blueprints.clients.service import client_exists, get_client_by_name, add_client
 from orders_tracker.blueprints.devices.service import device_exists, get_device_by_serial, add_device
 from orders_tracker.blueprints.staff.service import get_staff_by_name
-from orders_tracker.models import db, Order, Client, Device, Staff
+from orders_tracker.models import db, Order, Client, Device, Staff, OrderStatus, OrderType
 
 date_pattern = re.compile(r'^(\d{1,2}\.\d{1,2}\.\d{2,4})$')
 day_pattern = re.compile(r'^(\d{1,2})$')
@@ -110,6 +110,14 @@ def filter_by_status(status, orders_query):
     return orders_query
 
 
+def filter_by_type(order_type, orders_query):
+    if not order_type or order_type == '0':
+        return orders_query
+
+    orders_query = orders_query.filter(Order.type_id == int(order_type))
+    return orders_query
+
+
 def paginate_orders(metadata, orders_query):
     orders_query = orders_query.paginate(page=metadata['current'], per_page=metadata['rows_per_page'])
 
@@ -124,11 +132,12 @@ def get_pagination_metadata(page, orders_query):
             'first': 1, 'last': last_page, 'rows_per_page': rows_per_page}
 
 
-def filter_orders(search, sort_by, status):
+def filter_orders(search, sort_by, status, order_type):
     orders_query = Order.query.order_by(Order.created_at.desc())
     orders_query = search_orders(search, orders_query)
     orders_query = sort_orders(sort_by, orders_query)
     orders_query = filter_by_status(status, orders_query)
+    orders_query = filter_by_type(order_type, orders_query)
     return orders_query
 
 
@@ -136,14 +145,16 @@ def get_path_args():
     return request.args.get('search_query'), \
            request.args.get('sort_by'), \
            request.args.get('status'), \
+           request.args.get('type'), \
            request.args.get('page', 1, type=int)
 
 
 def get_form_fields():
     sort_by_field = request.form['sort_by_field'] if request.form['sort_by_field'] != 'new_first' else None
     status_field = request.form['status_field'] if request.form['status_field'] != '0' else None
+    type_field = request.form['type_field'] if request.form['type_field'] != '0' else None
     search_field = request.form['search_field'] if request.form['search_field'] else None
-    return sort_by_field, status_field, search_field
+    return sort_by_field, status_field, type_field, search_field
 
 
 def render_empty(stats, navigation_form):
@@ -167,6 +178,7 @@ def add_order(form):
         add_device(device)
 
     staff = get_staff_by_name(form.staff.data)
+    order_type = get_order_type_by_name(form.type.data)
 
     order = Order(form.title.data,
                   client_id=client.id,
@@ -175,6 +187,7 @@ def add_order(form):
                   staff_id=staff.id,
                   price=form.price.data,
                   status_id=1,
+                  type_id=order_type.id,
                   created_at=datetime.strptime(form.created_at.data, "%d.%m.%Y"))
 
     try:
@@ -200,6 +213,7 @@ def update_order(form, order_id):
         add_device(device)
 
     staff = get_staff_by_name(form.staff.data)
+    order_type = get_order_type_by_name(form.type.data)
 
     edited_order = Order.query.filter_by(id=order_id).first()
     edited_order.title = form.title.data
@@ -209,6 +223,7 @@ def update_order(form, order_id):
     edited_order.staff_id = staff.id
     edited_order.price = form.price.data
     edited_order.created_at = datetime.strptime(form.created_at.data, "%d.%m.%Y")
+    edited_order.type_id = order_type.id
 
     try:
         db.session.merge(edited_order)
@@ -221,3 +236,31 @@ def update_order(form, order_id):
 
 def get_orders_count():
     return Order.query.count()
+
+
+def get_order_type_by_name(name):
+    return OrderType.query.filter_by(name=name).first()
+
+
+def get_order_statuses_choices():
+    statuses = OrderStatus.query.all()
+    statuses.insert(0, 'Всі')
+    it = iter(statuses)
+    statuses_dict = dict(zip(range(len(statuses)), it))
+    status_choices = []
+    for key, value in statuses_dict.items():
+        temp = [key, value]
+        status_choices.append(temp)
+    return status_choices
+
+
+def get_order_types_choices():
+    types = OrderType.query.all()
+    types.insert(0, 'Всі')
+    it = iter(types)
+    types_dict = dict(zip(range(len(types)), it))
+    types_choices = []
+    for key, value in types_dict.items():
+        temp = [key, value]
+        types_choices.append(temp)
+    return types_choices

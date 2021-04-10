@@ -7,6 +7,12 @@ from sqlalchemy.exc import IntegrityError
 from orders_tracker.models import Staff, Order, db
 
 
+class StaffStats:
+    def __init__(self, orders, refills):
+        self.orders = orders
+        self.refills = refills
+
+
 def add_staff(staff):
     try:
         db.session.add(staff)
@@ -25,25 +31,40 @@ def get_staff():
     return Staff.query.all()
 
 
-def get_staff_orders_in_month(staff):
+def get_staff_stats_in_month(staff):
     month = datetime.today().month
+
     orders_in_month = Order.query.filter_by(staff_id=staff.id).filter(
         extract('month', Order.created_at) == month).count()
-    return orders_in_month
+
+    refills_in_month = Order.query.filter_by(staff_id=staff.id).filter_by(type_id=1).filter(
+        extract('month', Order.created_at) == month).count()
+
+    return StaffStats(orders_in_month, refills_in_month)
 
 
-def get_staff_orders_in_previous_month(staff):
+def get_staff_stats_in_previous_month(staff):
     prev_month = datetime.today().month - 1
+
     orders_in_month = Order.query.filter_by(staff_id=staff.id).filter(
         extract('month', Order.created_at) == prev_month).count()
-    return orders_in_month
+
+    refills_in_month = Order.query.filter_by(staff_id=staff.id).filter_by(type_id=1).filter(
+        extract('month', Order.created_at) == prev_month).count()
+
+    return StaffStats(orders_in_month, refills_in_month)
 
 
-def get_staff_orders_in_year(staff):
+def get_staff_stats_in_year(staff):
     year = datetime.today().year
+
     orders_in_year = Order.query.filter_by(staff_id=staff.id).filter(
         extract('year', Order.created_at) == year).count()
-    return orders_in_year
+
+    refills_in_year = Order.query.filter_by(staff_id=staff.id).filter_by(type_id=1).filter(
+        extract('year', Order.created_at) == year).count()
+
+    return StaffStats(orders_in_year, refills_in_year)
 
 
 def render_empty():

@@ -19,19 +19,24 @@ class NewOrderForm(FlaskForm):
                                      Length(max=200)])
 
     created_at = StringField("Дата створення",
-                       validators=[DataRequired(),
-                                   Regexp(r'^(0[1-9]|[12][0-9]|3[01])[\.](0[1-9]|1[012])[\.]((19|20)\d\d|\d\d)$')],
-                       default=datetime.now().strftime("%d.%m.%Y"))
+                             validators=[DataRequired(),
+                                         Regexp(
+                                             r'^(0[1-9]|[12][0-9]|3[01])[\.](0[1-9]|1[012])[\.]((19|20)\d\d|\d\d)$')],
+                             default=datetime.now().strftime("%d.%m.%Y"))
 
     serial = StringField("Серійний номер",
                          id='serial_autocomplete',
                          validators=[Length(max=200)])
 
     price = FloatField("Ціна", validators=[DataRequired()])
+
     staff = SelectField("Виконавець")
+
+    type = SelectField("Тип замовлення")
+
     submit = SubmitField("Зберегти")
 
-    def __init__(self, order=None, staff_choices=None, *args, **kwargs):
+    def __init__(self, order=None, staff_choices=None, type_choices=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if order:
             self.title.data = order.title
@@ -41,9 +46,13 @@ class NewOrderForm(FlaskForm):
             self.serial.data = order.device.serial
             self.price.data = order.price
             self.staff.data = order.staff.name
+            self.type.data = order.type.name
 
         if staff_choices:
             self.staff.choices = staff_choices
+
+        if type_choices:
+            self.type.choices = type_choices
 
 
 class NewClientForm(FlaskForm):
@@ -97,14 +106,21 @@ class DeleteConfirmForm(FlaskForm):
 class NavigationForm(FlaskForm):
     search_field = StringField("Введіть пошуковий запит")
 
+    status_field = SelectField('Статус')
+
+    type_field = SelectField('Тип')
+
     sort_by_field = SelectField('Сортувати за', choices=[('new_first', 'Датою (нові спочатку)'),
                                                          ('old_first', 'Датою (старі спочатку)'),
                                                          ('title', 'Назвою'),
                                                          ('client', 'Клієнтом'),
                                                          ('status', 'Статусом')])
 
-    status_field = SelectField('Статус', choices=[('0', 'Всі'),
-                                                  ('1', 'Нові'),
-                                                  ('2', 'В процесі'),
-                                                  ('3', 'Виконані'),
-                                                  ('4', 'Скасовані')])
+    def __init__(self, status_choices=None, type_choices=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if status_choices:
+            self.status_field.choices = status_choices
+
+        if type_choices:
+            self.type_field.choices = type_choices

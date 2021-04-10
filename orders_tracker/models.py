@@ -33,6 +33,9 @@ class Order(db.Model):
     status_id = db.Column(db.Integer, db.ForeignKey('order_status.id'), nullable=False)
     status = db.relationship('OrderStatus', backref=db.backref('templates', lazy=True))
 
+    type_id = db.Column(db.Integer, db.ForeignKey('order_type.id'), nullable=False)
+    type = db.relationship('OrderType', backref=db.backref('templates', lazy=True))
+
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     client = db.relationship('Client', backref=db.backref('templates', lazy=True))
 
@@ -45,7 +48,7 @@ class Order(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, title, client_id=None, device_id=None,
-                 staff_id=None, description=None, price=None, created_at=None, status_id=None):
+                 staff_id=None, description=None, price=None, created_at=None, status_id=None, type_id=None):
         self.title = title
         self.description = description
         self.price = price
@@ -54,6 +57,7 @@ class Order(db.Model):
         self.staff_id = staff_id
         self.created_at = created_at
         self.status_id = status_id
+        self.type_id = type_id
 
     def __repr__(self):
         return '<Order %r>' % self.title
@@ -92,6 +96,17 @@ class Staff(db.Model):
 
 
 class OrderStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return self.name
+
+
+class OrderType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
 

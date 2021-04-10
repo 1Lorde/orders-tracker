@@ -7,35 +7,40 @@
                         page=pagination_data['previous'],
                         search_query=navigation_form.search_field.data if navigation_form.search_field.data else None,
                         sort_by=navigation_form.sort_by_field.data if navigation_form.sort_by_field.data else None,
-                        status=navigation_form.status_field.data if navigation_form.status_field.data else None) %}
+                        status=navigation_form.status_field.data if navigation_form.status_field.data else None,
+                        type=navigation_form.type_field.data if navigation_form.type_field.data else None) %}
 
 {% set next_link=url_for(
                         pagination_source,
                         page=pagination_data['next'],
                         search_query=navigation_form.search_field.data if navigation_form.search_field.data else None,
                         sort_by=navigation_form.sort_by_field.data if navigation_form.sort_by_field.data else None,
-                        status=navigation_form.status_field.data if navigation_form.status_field.data else None) %}
+                        status=navigation_form.status_field.data if navigation_form.status_field.data else None,
+                        type=navigation_form.type_field.data if navigation_form.type_field.data else None) %}
 
 {% set first_link=url_for(
                         pagination_source,
                         page=pagination_data['first'],
                         search_query=navigation_form.search_field.data if navigation_form.search_field.data else None,
                         sort_by=navigation_form.sort_by_field.data if navigation_form.sort_by_field.data else None,
-                        status=navigation_form.status_field.data if navigation_form.status_field.data else None) %}
+                        status=navigation_form.status_field.data if navigation_form.status_field.data else None,
+                        type=navigation_form.type_field.data if navigation_form.type_field.data else None) %}
 
 {% set current_link=url_for(
                         pagination_source,
                         page=pagination_data['current'],
                         search_query=navigation_form.search_field.data if navigation_form.search_field.data else None,
                         sort_by=navigation_form.sort_by_field.data if navigation_form.sort_by_field.data else None,
-                        status=navigation_form.status_field.data if navigation_form.status_field.data else None) %}
+                        status=navigation_form.status_field.data if navigation_form.status_field.data else None,
+                        type=navigation_form.type_field.data if navigation_form.type_field.data else None) %}
 
 {% set last_link=url_for(
                         pagination_source,
                         page=pagination_data['last'],
                         search_query=navigation_form.search_field.data if navigation_form.search_field.data else None,
                         sort_by=navigation_form.sort_by_field.data if navigation_form.sort_by_field.data else None,
-                        status=navigation_form.status_field.data if navigation_form.status_field.data else None) %}
+                        status=navigation_form.status_field.data if navigation_form.status_field.data else None,
+                        type=navigation_form.type_field.data if navigation_form.type_field.data else None) %}
 
 {% block panel %}
     {% if get_flashed_messages(with_categories=True) %}
@@ -82,8 +87,10 @@
                             </div>
                             <div class="control">
                                 {% if navigation_form.search_field.data %}
-                                    <a href="{{ url_for('orders_bp.orders', sort_by=navigation_form.sort_by_field.data, status=navigation_form.status_field.data) }}"
-                                       class="button">
+                                    <a href="{{ url_for('orders_bp.orders',
+                                                            sort_by=navigation_form.sort_by_field.data,
+                                                            status=navigation_form.status_field.data,
+                                                            type=navigation_form.type_field.data) }}" class="button">
                                         <ion-icon name="backspace-outline"></ion-icon>
                                     </a>
                                 {% endif %}
@@ -96,6 +103,14 @@
                         <label class="label">{{ navigation_form.status_field.label }}</label>
                         <div class="select">
                             {{ navigation_form.status_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="level-left">
+                    <div class="control pl-2">
+                        <label class="label">{{ navigation_form.type_field.label }}</label>
+                        <div class="select">
+                            {{ navigation_form.type_field }}
                         </div>
                     </div>
                 </div>

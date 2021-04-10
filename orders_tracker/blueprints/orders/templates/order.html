@@ -4,7 +4,7 @@
     {% if get_flashed_messages(with_categories=True) %}
         {% include 'notification.html' %}
     {% else %}
-        <div class="section"></div>
+        <div class="level"></div>
     {% endif %}
 {% endblock %}
 
@@ -77,17 +77,31 @@
         <div class="columns mt-5">
             <div class="column">
                 <div class="container is-fluid ml-5">
-                    <h5 class="title is-5">{{ order.title }}</h5>
-                    <div class="block">Пристрій:
-                        <strong>{{ order.device.name if order.device.name else "(Без назви)" }}</strong>
-                        <span class="tag is-primary is-light is-rounded">
-                                    <strong>{{ order.device.serial }}</strong>
+                    <h5 class="title is-5">
+                        {{ order.title }}
+                        {% if order.type.id == 1 %}
+                            <span class="tag is-black ml-3 tag_shadow">
+                            <strong>{{ order.type.name }}</strong>
+                        {% elif order.type.id == 2 %}
+                            <span class="tag is-light ml-3 tag_shadow">
+                            <strong>{{ order.type.name }}</strong>
+                        {% elif order.type.id == 3 %}
+                            <span class="tag is-white ml-3 tag_shadow">
+                            <strong>{{ order.type.name }}</strong>
+                        {% endif %}
                         </span>
-                    </div>
+                    </h5>
+
                     <div class="block">Клієнт:
                         <a href="{{ url_for("clients_bp.client", client_id=order.client.id) }}">
                             <strong>{{ order.client }}</strong>
                         </a>
+                    </div>
+                    <div class="block">Пристрій:
+                        <strong>{{ order.device.name if order.device.name else "(Без назви)" }}</strong>
+                        <span class="tag is-primary is-light is-rounded">
+                            <strong>{{ order.device.serial }}</strong>
+                        </span>
                     </div>
                     <div class="block">Вартість:
                         <strong>{{ order.price if order.price else "(Не вказано)" }} грн</strong>

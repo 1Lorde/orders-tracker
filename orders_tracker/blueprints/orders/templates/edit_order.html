@@ -35,8 +35,8 @@
                                 <p class="control is-expanded has-icons-left">
                                     {{ form.price(class='input') }}
                                     <span class="icon is-left">
-                                                    <ion-icon name="cash-outline"></ion-icon>
-                                                </span>
+                                        <ion-icon name="cash-outline"></ion-icon>
+                                    </span>
                                 </p>
                                 <p class="control">
                                     <a class="button is-link is-static">
@@ -51,9 +51,9 @@
                     <label class="label">{{ form.staff.label }}</label>
                     <div class="control is-expanded has-icons-left">
                         <div class="select is-fullwidth">
-                                        <span class="icon is-left">
-                                            <ion-icon name="person-outline"></ion-icon>
-                                        </span>
+                            <span class="icon is-left">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </span>
                             {{ form.staff(class="is-fullwidth") }}
                         </div>
                     </div>
@@ -61,6 +61,17 @@
             </div>
 
             <div class="column">
+                <div class="field">
+                    <label class="label">{{ form.type.label }}</label>
+                    <div class="control is-expanded has-icons-left">
+                        <div class="select is-fullwidth">
+                            <span class="icon is-left">
+                                <ion-icon name="pricetag-outline"></ion-icon>
+                            </span>
+                            {{ form.type(class="is-fullwidth") }}
+                        </div>
+                    </div>
+                </div>
                 <div class="field">
                     <label class="label">{{ form.client.label }}</label>
                     <div class="control is-expanded has-icons-left">
@@ -76,6 +87,9 @@
                         {{ form.serial(class='input') }}
                     </p>
                 </div>
+            </div>
+
+            <div class="column is-fullheight">
                 {{ datepicker.loader(theme="base") }} {# to load jQuery-ui #}
                 {{ datepicker.picker(id=".dp") }}
                 <div class="field">
@@ -87,9 +101,6 @@
                         </span>
                     </div>
                 </div>
-            </div>
-
-            <div class="column is-fullheight">
                 <label class="label">{{ form.description.label }}</label>
                 <div class="control is-expanded">
                     {{ form.description(class='textarea', rows="7") }}
