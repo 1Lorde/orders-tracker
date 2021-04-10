@@ -1,43 +1,22 @@
-{% extends "message.html" %}
+{% extends 'modal.html' %}
 
-{% block panel %}
-    {% if get_flashed_messages(with_categories=True) %}
-        {% include 'notification.html' %}
-    {% else %}
-        <div class="level">
-        </div>
-    {% endif %}
-{% endblock %}
+{% set return_link=url_for('orders_bp.order', order_id=order_id) %}
 
-{% block message_color %}
-    is-dark
-{% endblock %}
-
-{% block breadcrumbs %}
-    <nav class="breadcrumb pl-3">
-        <ul>
-            <li class="is-active">
-                <a>
-                    <ion-icon name="bag-outline"></ion-icon>
-                    <span class="pl-2">Замовлення</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <ion-icon name="bag-add-outline"></ion-icon>
-                    <span class="pl-2">Додати нове</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-{% endblock %}
 
 {% block message_header %}
-    <ion-icon size="large" name="bag-add-outline"></ion-icon>
-    <span class="pl-2">Нове замовлення</span>
+    <div class="level-item">
+        <p id="message_title">{{ message_title }}</p>
+    </div>
+    <div class="level-item is-hidden-mobile">
+        <ion-icon size="large" name="create-outline"></ion-icon>
+    </div>
 {% endblock %}
 
-{% block message_body %}
+{% block form %}
+    {% if get_flashed_messages(with_categories=True) %}
+        {% include 'notification.html' %}
+    {% endif %}
+
     <form action="" method="post" id="new_order_form">
         {{ form.hidden_tag() }}
         <div class="field is-horizontal">
@@ -141,6 +120,17 @@
             });
         });
 
+        $(function () {
+            $.ajax({
+                url: '/api/autocomplete/devices?client_name=' + $('#client_autocomplete').val()
+            }).done(function (data) {
+                $('#serial_autocomplete').autocomplete({
+                    classes: {"ui-autocomplete": "highlight"},
+                    source: data
+                });
+            });
+        });
+
         $(document).ready(function () {
             $('#client_autocomplete').change(function () {
                 $.ajax({
@@ -154,17 +144,6 @@
             });
         });
 
-        {#$(function () {#}
-        {#    $.ajax({#}
-        {#        url: '{{ url_for("api_bp.staff_autocomplete") }}'#}
-        {#    }).done(function (data) {#}
-        {#        $('#staff_autocomplete').autocomplete({#}
-        {#            classes: {"ui-autocomplete": "highlight"},#}
-        {#            source: data#}
-        {#        });#}
-        {#    });#}
-
-
         $('.dp').datepicker({
             dateFormat: "dd.mm.yy",
             monthNames: ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'],
@@ -173,3 +152,4 @@
         });
     </script>
 {% endblock %}
+
