@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, Length, Regexp
 
 class NewOrderForm(FlaskForm):
     title = StringField("Назва",
+                        id='title_autocomplete',
                         validators=[DataRequired(),
                                     Length(max=100)])
 
@@ -98,3 +99,7 @@ class NavigationForm(FlaskForm):
                                                   ('2', 'В процесі'),
                                                   ('3', 'Виконані'),
                                                   ('4', 'Скасовані')])
+
+
+class CancelConfirmForm(FlaskForm):
+    cancel = SubmitField("Так, скасувати")

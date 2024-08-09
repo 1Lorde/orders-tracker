@@ -26,15 +26,19 @@ def get_staff():
 
 
 def get_staff_orders_in_month(staff):
+    year = datetime.today().year
     month = datetime.today().month
     orders_in_month = Order.query.filter_by(staff_id=staff.id).filter(
+        extract('year', Order.created_at) == year).filter(
         extract('month', Order.created_at) == month).count()
     return orders_in_month
 
 
 def get_staff_orders_in_previous_month(staff):
+    year = datetime.today().year
     prev_month = datetime.today().month - 1
     orders_in_month = Order.query.filter_by(staff_id=staff.id).filter(
+        extract('year', Order.created_at) == year).filter(
         extract('month', Order.created_at) == prev_month).count()
     return orders_in_month
 

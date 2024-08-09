@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
@@ -16,7 +17,12 @@ class Client(db.Model):
 
     def __init__(self, name, phone=None, address=None, notes=None):
         self.name = name
-        self.phone = phone
+        if phone is None:
+            for i in re.findall(r'\+[-()\s\d]+?(?=\s*[+<])', name):
+                self.phone = i
+                break
+        else:
+            self.phone = phone
         self.address = address
         self.notes = notes
 

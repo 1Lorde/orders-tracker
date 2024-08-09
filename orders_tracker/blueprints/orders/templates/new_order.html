@@ -132,27 +132,55 @@
     <script>
         $(function () {
             $.ajax({
-                url: '{{ url_for("api_bp.client_autocomplete") }}'
+                url: '{{ url_for("api_bp.title_autocomplete") }}'
             }).done(function (data) {
-                $('#client_autocomplete').autocomplete({
+                $('#title_autocomplete').autocomplete({
                     classes: {"ui-autocomplete": "highlight"},
-                    source: data
+                    source: data,
+                    minLength: 0
+                }).focus(function () {
+                    $(this).autocomplete('search', $(this).val());
                 });
             });
         });
 
-        $(document).ready(function () {
-            $('#client_autocomplete').change(function () {
-                $.ajax({
+
+        $(function () {
+            $.ajax({
+                url: '{{ url_for("api_bp.client_autocomplete") }}'
+            }).done(function (data) {
+                $('#client_autocomplete').autocomplete({
+                    classes: {"ui-autocomplete": "highlight"},
+                    source: data,
+                    minLength: 0,
+                    change: autoCompleteChanged
+                }).focus(function () {
+                    $(this).autocomplete('search', $(this).val());
+                });
+            });
+        });
+
+        function autoCompleteChanged(event, ui) {
+            $.ajax({
                     url: '/api/autocomplete/devices?client_name=' + $('#client_autocomplete').val()
                 }).done(function (data) {
                     $('#serial_autocomplete').autocomplete({
                         classes: {"ui-autocomplete": "highlight"},
-                        source: data
+                        source: data,
+                        minLength: 0
+                    }).focus(function () {
+                        $(this).autocomplete('search', $(this).val());
+                    });
+                }).fail(function () {
+                    $('#serial_autocomplete').autocomplete({
+                        classes: {"ui-autocomplete": "highlight"},
+                        source: null,
+                        minLength: 0
+                    }).focus(function () {
+                        $(this).autocomplete('search', $(this).val());
                     });
                 });
-            });
-        });
+        }
 
         {#$(function () {#}
         {#    $.ajax({#}

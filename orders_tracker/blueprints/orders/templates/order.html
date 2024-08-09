@@ -118,10 +118,11 @@
                     <input class="button is-rounded is-light is-success" type="submit" name="finish"
                            value="Завершити"/>
                 {% endif %}
-
                 {% if order.status_id < 3 %}
-                    <input class="button is-rounded is-light is-danger" type="submit" name="cancel"
-                           value="Скасувати"/>
+                    <a class="button is-rounded is-danger is-light"
+                       href="{{ url_for('orders_bp.cancel_order', order_id=order.id) }}">
+                        <span>Скасувати</span>
+                    </a>
                 {% endif %}
             </form>
         </div>

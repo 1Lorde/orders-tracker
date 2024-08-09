@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint, Response, request
 
-from orders_tracker.models import Client, Device, OrderStatus, Staff
+from orders_tracker.models import Client, Device, OrderStatus, Staff, Order
 
 api_blueprint = Blueprint('api_bp', __name__)
 
@@ -37,3 +37,10 @@ def order_status(status_id):
     status_name = OrderStatus.query.filter_by(id=status_id).with_entities(OrderStatus.name).first()[0]
 
     return status_name
+
+
+@api_blueprint.route('/api/autocomplete/orders/titles', methods=['GET'])
+def title_autocomplete():
+    titles = [obj[0] for obj in Order.query.with_entities(Order.title).order_by(Order.title).distinct()]
+
+    return Response(json.dumps(titles), mimetype='application/json')
