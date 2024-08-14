@@ -7,7 +7,7 @@ from sqlalchemy import or_, extract
 from sqlalchemy.exc import IntegrityError
 
 from orders_tracker.blueprints.clients.service import client_exists, get_client_by_name, add_client
-from orders_tracker.blueprints.devices.service import device_exists, get_device_by_serial, add_device
+from orders_tracker.blueprints.devices.service import device_exists_by_serial, get_device_by_serial, add_device
 from orders_tracker.models import db, Order, Client, Device, Staff
 from orders_tracker.blueprints.staff.service import get_staff_by_name
 
@@ -160,15 +160,19 @@ def add_order(form):
         client = Client(form.client.data)
         add_client(client)
 
-    if device_exists(form.serial.data, client.id):
-        device = get_device_by_serial(form.serial.data, client.id)
+    if client.id is None:
+        db.session.rollback()
+        return -1
+
+    if device_exists_by_serial(form.serial.data):
+        device = get_device_by_serial(form.serial.data)
     else:
-        device = Device(form.serial.data, client.id)
+        device = Device(form.serial.data, client.id, name=form.title.data)
         add_device(device)
 
     staff = get_staff_by_name(form.staff.data)
 
-    order = Order(form.title.data,
+    order = Order(form.title.data.strip(),
                   client_id=client.id,
                   device_id=device.id,
                   description=form.description.data,
@@ -181,9 +185,11 @@ def add_order(form):
         db.session.add(order)
         db.session.commit()
         flash('Замовлення успішно додано.', category='success')
+        return 0
     except IntegrityError:
         db.session.rollback()
         flash('Виникла помилка.', category='error')
+        return -1
 
 
 def update_order(order):

@@ -16,9 +16,10 @@ class Client(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     def __init__(self, name, phone=None, address=None, notes=None):
-        self.name = name
+        if name is not None:
+            self.name = name.strip()
         if phone is None:
-            for i in re.findall(r'\+[-()\s\d]+?(?=\s*[+<])', name):
+            for i in re.findall(r'\+?\d[\d -]{8,}\d', name):
                 self.phone = i
                 break
         else:
@@ -76,8 +77,10 @@ class Device(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     def __init__(self, serial, client_id, name=None):
-        self.name = name
-        self.serial = serial
+        if name is not None:
+            self.name = name.strip()
+        if serial is not None:
+            self.serial = serial.strip()
         self.client_id = client_id
 
     def __repr__(self):

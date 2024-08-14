@@ -26,9 +26,9 @@ def update_device(device):
         flash('При оновленні інформації про пристрій виникла помилка.', category='error')
 
 
-def device_exists(serial, client_id):
-    return Device.query.filter_by(serial=serial, client_id=client_id).first() is not None
+def device_exists_by_serial(serial):
+    return Device.query.filter_by(serial=serial).first() is not None
 
 
-def get_device_by_serial(serial, client_id):
-    return Device.query.filter_by(serial=serial, client_id=client_id).first()
+def get_device_by_serial(serial):
+    return Device.query.filter_by(serial=serial).first()

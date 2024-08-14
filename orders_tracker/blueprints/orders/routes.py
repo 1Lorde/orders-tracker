@@ -16,8 +16,9 @@ def new_order():
     form = NewOrderForm(formdata=request.form, staff_choices=choices)
     if request.method == 'POST':
         if form.validate_on_submit():
-            add_order(form)
-            return redirect(url_for('orders_bp.orders'))
+            return_code = add_order(form)
+            if return_code == 0:
+                return redirect(url_for('orders_bp.orders'))
         else:
             flash('Перевірте введені значення.', category='warning')
 

@@ -78,7 +78,7 @@ def edit_client(client_id):
 
     if request.method == 'POST':
         if modal_form.validate_on_submit():
-            edited_client.name = modal_form.name.data
+            edited_client.name = modal_form.name.data.strip()
             edited_client.phone = modal_form.phone.data
             edited_client.address = modal_form.address.data
             edited_client.notes = modal_form.notes.data

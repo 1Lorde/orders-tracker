@@ -66,7 +66,7 @@ def add_client(client):
         flash('Клієнта успішно додано.', category='success')
     except IntegrityError:
         db.session.rollback()
-        flash('Клієнт вже існує.', category='error')
+        flash('Клієнт з таким номером телефону або ім\'ям вже існує.', category='error')
 
 
 def update_client(client):
@@ -87,7 +87,7 @@ def remove_client(client):
         flash('Клієнта видалено.', category='success')
     except IntegrityError:
         db.session.rollback()
-        flash('При видаленні клієнта виникла помилка.', category='error')
+        flash('Клієнта неможливо видалити, оскільки існують пов\'язані з ним замовлення.', category='error')
 
 
 def client_exists(name):

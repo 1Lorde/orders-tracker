@@ -33,8 +33,8 @@ def edit_device(client_id, serial):
 
     if request.method == 'POST':
         if modal_form.validate_on_submit():
-            edited_device.name = modal_form.name.data
-            edited_device.serial = modal_form.serial.data
+            edited_device.name = modal_form.name.data.strip()
+            edited_device.serial = modal_form.serial.data.strip()
             update_device(edited_device)
             return redirect(url_for('clients_bp.client', client_id=edited_device.client_id))
         else:
