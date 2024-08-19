@@ -13,7 +13,7 @@ Set colProcessList = objWMIService.ExecQuery _
 Set WshShell = CreateObject("WScript.Shell")
 
 If colProcessList.count>0 then
-    WshShell.run "cmd.exe /C taskkill /IM" & FindProc, 0
+    WshShell.run "cmd.exe /C taskkill /IM " & FindProc, 0
     MsgBox "Successfully stopped!", 64, "orders-tracker"
 End if
 

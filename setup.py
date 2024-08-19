@@ -13,14 +13,14 @@ class PostInstallCommand(install):
 
         make_shortcut(os.path.join(str(Path.home()), 'AppData', 'Local', 'Programs', 'Python', 'Python38', 'Lib',
                                    'site-packages', 'orders_tracker', 'bin', 'start.vbs'),
-                      name='Start Трекер_Замовлень',
+                      name='Start Orders_Tracker',
                       description='Запуск програми orders-tracker.exe',
                       icon=os.path.join(str(Path.home()), 'AppData', 'Local', 'Programs', 'Python', 'Python38', 'Lib',
                                         'site-packages', 'orders_tracker', 'bin', 'icons', 'start.ico'))
 
         make_shortcut(os.path.join(str(Path.home()), 'AppData', 'Local', 'Programs', 'Python', 'Python38', 'Lib',
                                    'site-packages', 'orders_tracker', 'bin', 'stop.vbs'),
-                      name='Stop Трекер_Замовлень',
+                      name='Stop Orders_Tracker',
                       description='Зупинка програми orders-tracker.exe',
                       icon=os.path.join(str(Path.home()), 'AppData', 'Local', 'Programs', 'Python', 'Python38', 'Lib',
                                         'site-packages', 'orders_tracker', 'bin', 'icons', 'stop.ico'))
@@ -83,5 +83,6 @@ setuptools.setup(
                                      'blueprints/clients/templates/*',
                                      'blueprints/devices/templates/*',
                                      'blueprints/orders/templates/*',
-                                     'blueprints/staff/templates/*']}
+                                     'blueprints/staff/templates/*',
+                                     'blueprints/start/templates/*']}
 )

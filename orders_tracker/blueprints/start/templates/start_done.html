@@ -1,7 +1,8 @@
 <div class="box mt-5">
     <div class="level">
         <div class="level-left">
-            <p class="title is-3 has-text-dark">🏁 Готово</p>
+            <p class="title is-3 has-text-dark">
+                {% if supportsEmoji %}🏁{% endif %} Готово</p>
         </div>
         <div class="level-right">
             <ion-icon size="large" name="checkmark-circle-outline"></ion-icon>
@@ -15,7 +16,7 @@
         <br/>
         <div class="has-text-centered">
             <a class="button is-rounded is-link is-outlined"
-               href="{{ url_for('orders_bp.orders') }}">
+               href="{{ url_for('staff_bp.staff') }}">
                 <span>Розпочати</span>
                 <span class="icon"><ion-icon name="arrow-forward-circle-outline"></ion-icon></span>
             </a>
