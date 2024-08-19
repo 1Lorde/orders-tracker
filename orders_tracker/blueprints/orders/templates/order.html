@@ -105,26 +105,36 @@
                 {% endif %}
             </div>
         </div>
-        <div class="level-right">
+        <div class="block has-text-right">
             <span class="heading is-size-7">Додано: {{ order.created_at.strftime('%d.%m.%Y') }}</span>
         </div>
-        <div class="block has-text-centered">
-            <hr>
-            <form action="" method="post">
-                {% if order.status_id == 1 %}
-                    <input class="button is-rounded is-light is-link" type="submit" name="start"
-                           value="Розпочати"/>
-                {% elif order.status_id == 2 %}
-                    <input class="button is-rounded is-light is-success" type="submit" name="finish"
-                           value="Завершити"/>
-                {% endif %}
-                {% if order.status_id < 3 %}
-                    <a class="button is-rounded is-danger is-light"
-                       href="{{ url_for('orders_bp.cancel_order', order_id=order.id) }}">
-                        <span>Скасувати</span>
-                    </a>
-                {% endif %}
-            </form>
+        <hr>
+        <div class="level">
+            <div class="level-left pl-4">
+                <a class="button is-rounded is-link is-outlined"
+                   href="{{ url_for('orders_bp.edit_order', order_id=order.id) }}">
+                    <span>Редагувати</span>
+                    <span class="icon"><ion-icon name="pencil-outline"></ion-icon></span>
+                </a>
+            </div>
+
+            <div class="level-right">
+                <form action="" method="post">
+                    {% if order.status_id == 1 %}
+                        <input class="button is-rounded is-light is-link" type="submit" name="start"
+                               value="Розпочати"/>
+                    {% elif order.status_id == 2 %}
+                        <input class="button is-rounded is-light is-success" type="submit" name="finish"
+                               value="Завершити"/>
+                    {% endif %}
+                    {% if order.status_id < 3 %}
+                        <a class="button is-rounded is-danger is-light"
+                           href="{{ url_for('orders_bp.cancel_order', order_id=order.id) }}">
+                            <span>Скасувати</span>
+                        </a>
+                    {% endif %}
+                </form>
+            </div>
         </div>
 
     </div>

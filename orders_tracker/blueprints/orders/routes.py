@@ -1,10 +1,9 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-
-from orders_tracker.forms import NewOrderForm, NavigationForm, CancelConfirmForm
-from orders_tracker.models import Order, Staff
 from orders_tracker.blueprints.orders.service import add_order, get_orders_count, get_form_fields, get_path_args, \
     filter_orders, \
-    render_empty, paginate_orders, get_pagination_metadata, update_order
+    render_empty, paginate_orders, get_pagination_metadata, update_order, change_order_status
+from orders_tracker.forms import NewOrderForm, NavigationForm, CancelConfirmForm
+from orders_tracker.models import Order, Staff
 from orders_tracker.tables import OrdersTable
 
 orders_blueprint = Blueprint('orders_bp', __name__, template_folder="templates")
@@ -69,10 +68,31 @@ def order(order_id):
         elif request.form.get('finish'):
             selected_order.status_id = 3
 
-        update_order(selected_order)
+        change_order_status(selected_order)
         return redirect(url_for('orders_bp.order', order_id=selected_order.id))
 
     return render_template('order.html', order=selected_order)
+
+
+@orders_blueprint.route('/orders/<order_id>/edit', methods=['GET', 'POST'])
+def edit_order(order_id):
+    choices = Staff.query.all()
+    edited_order = Order.query.filter_by(id=order_id).first()
+    modal_form = NewOrderForm(staff_choices=choices)
+
+    if request.method == 'POST':
+        if modal_form.validate_on_submit():
+            update_order(modal_form, order_id)
+            return redirect(url_for('orders_bp.order', order_id=edited_order.id))
+        else:
+            flash('Дані про замовлення не оновлено.', category='warning')
+
+    modal_form = NewOrderForm(order=edited_order, staff_choices=choices)
+
+    return render_template('edit_order.html',
+                           form=modal_form,
+                           message_title="Редагування інформації про замовлення",
+                           order_id=edited_order.id)
 
 
 @orders_blueprint.route('/orders/<order_id>/cancel', methods=['GET', 'POST'])
@@ -83,7 +103,7 @@ def cancel_order(order_id):
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_order.status_id = 4
-            update_order(selected_order)
+            change_order_status(selected_order)
             return redirect(url_for('orders_bp.order', order_id=selected_order.id))
 
     return render_template('cancel_confirm.html',

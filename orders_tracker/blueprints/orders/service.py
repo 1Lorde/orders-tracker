@@ -7,9 +7,9 @@ from sqlalchemy import or_, extract
 from sqlalchemy.exc import IntegrityError
 
 from orders_tracker.blueprints.clients.service import client_exists, get_client_by_name, add_client
-from orders_tracker.blueprints.devices.service import device_exists_by_serial, get_device_by_serial, add_device
-from orders_tracker.models import db, Order, Client, Device, Staff
+from orders_tracker.blueprints.devices.service import get_device_by_serial, add_device, device_exists_by_serial
 from orders_tracker.blueprints.staff.service import get_staff_by_name
+from orders_tracker.models import db, Order, Client, Device, Staff
 
 date_pattern = re.compile(r'^(\d{1,2}\.\d{1,2}\.\d{2,4})$')
 day_pattern = re.compile(r'^(\d{1,2})$')
@@ -134,9 +134,9 @@ def filter_orders(search, sort_by, status):
 
 def get_path_args():
     return request.args.get('search_query'), \
-           request.args.get('sort_by'), \
-           request.args.get('status'), \
-           request.args.get('page', 1, type=int)
+        request.args.get('sort_by'), \
+        request.args.get('status'), \
+        request.args.get('page', 1, type=int)
 
 
 def get_form_fields():
@@ -179,7 +179,7 @@ def add_order(form):
                   staff_id=staff.id,
                   price=form.price.data,
                   status_id=1,
-                  created_at=datetime.strptime(form.date.data, "%d.%m.%Y"))
+                  created_at=datetime.strptime(form.created_at.data, "%d.%m.%Y"))
 
     try:
         db.session.add(order)
@@ -192,7 +192,40 @@ def add_order(form):
         return -1
 
 
-def update_order(order):
+def update_order(form, order_id):
+    if client_exists(form.client.data):
+        client = get_client_by_name(form.client.data)
+    else:
+        client = Client(form.client.data)
+        add_client(client)
+
+    if device_exists_by_serial(form.serial.data):
+        device = get_device_by_serial(form.serial.data)
+    else:
+        device = Device(form.serial.data, client.id)
+        add_device(device)
+
+    staff = get_staff_by_name(form.staff.data)
+
+    edited_order = Order.query.filter_by(id=order_id).first()
+    edited_order.title = form.title.data
+    edited_order.client_id = client.id
+    edited_order.device_id = device.id
+    edited_order.description = form.description.data
+    edited_order.staff_id = staff.id
+    edited_order.price = form.price.data
+    edited_order.created_at = datetime.strptime(form.created_at.data, "%d.%m.%Y")
+
+    try:
+        db.session.merge(edited_order)
+        db.session.commit()
+        flash('Інформацію оновлено.', category='success')
+    except IntegrityError:
+        db.session.rollback()
+        flash('При оновленні інформації про замовлення виникла помилка.', category='error')
+
+
+def change_order_status(order):
     try:
         db.session.merge(order)
         db.session.commit()

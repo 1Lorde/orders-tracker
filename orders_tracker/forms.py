@@ -19,7 +19,7 @@ class NewOrderForm(FlaskForm):
                          validators=[DataRequired(),
                                      Length(max=200)])
 
-    date = StringField("Дата створення",
+    created_at = StringField("Дата створення",
                        validators=[DataRequired(),
                                    Regexp(r'^(0[1-9]|[12][0-9]|3[01])[\.](0[1-9]|1[012])[\.]((19|20)\d\d|\d\d)$')],
                        default=datetime.now().strftime("%d.%m.%Y"))
@@ -30,11 +30,21 @@ class NewOrderForm(FlaskForm):
 
     price = FloatField("Ціна", validators=[DataRequired()])
     staff = SelectField("Виконавець")
-    submit = SubmitField("Додати")
+    submit = SubmitField("Зберегти")
 
-    def __init__(self, staff_choices: list, *args, **kwargs):
+    def __init__(self, order=None, staff_choices=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.staff.choices = staff_choices
+        if order:
+            self.title.data = order.title
+            self.description.data = order.description
+            self.client.data = order.client
+            self.created_at.data = order.created_at.strftime("%d.%m.%Y")
+            self.serial.data = order.device.serial
+            self.price.data = order.price
+            self.staff.data = order.staff.name
+
+        if staff_choices:
+            self.staff.choices = staff_choices
 
 
 class NewClientForm(FlaskForm):
