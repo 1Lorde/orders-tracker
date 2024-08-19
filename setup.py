@@ -30,7 +30,6 @@ setuptools.setup(
     name="orders-tracker",
     version="1.0",
     author="Vlad Savchuk",
-    author_email="savchuk.vlad@yahoo.com",
     url="https://github.com/1Lorde",
     description="Orders tracking app.",
     license="MIT",
