@@ -28,7 +28,7 @@ class PostInstallCommand(install):
 
 setuptools.setup(
     name="orders-tracker",
-    version="1.0",
+    version="1.2",
     author="Vlad Savchuk",
     url="https://github.com/1Lorde",
     description="Orders tracking app.",
